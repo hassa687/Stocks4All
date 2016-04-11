@@ -46,6 +46,7 @@ namespace Stocks4All
       this.addStockToolStripMenuItemAddStock = new System.Windows.Forms.ToolStripMenuItem();
       this.saveStocksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.contactSupportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.reportBugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.label2 = new System.Windows.Forms.Label();
       this.label1 = new System.Windows.Forms.Label();
       this.buttonAddStock = new System.Windows.Forms.Button();
@@ -61,7 +62,6 @@ namespace Stocks4All
       this.dataGridViewRecentOrders = new System.Windows.Forms.DataGridView();
       this.tabPage3 = new System.Windows.Forms.TabPage();
       this.WatchListGrid = new System.Windows.Forms.DataGridView();
-      this.reportBugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.menuStrip1.SuspendLayout();
       this.tabControlMain.SuspendLayout();
       this.tabPage1.SuspendLayout();
@@ -175,6 +175,13 @@ namespace Stocks4All
       this.contactSupportToolStripMenuItem.Size = new System.Drawing.Size(110, 20);
       this.contactSupportToolStripMenuItem.Text = "Contact Support";
       this.contactSupportToolStripMenuItem.Click += new System.EventHandler(this.contactSupportToolStripMenuItem_Click);
+      // 
+      // reportBugToolStripMenuItem
+      // 
+      this.reportBugToolStripMenuItem.Name = "reportBugToolStripMenuItem";
+      this.reportBugToolStripMenuItem.Size = new System.Drawing.Size(81, 20);
+      this.reportBugToolStripMenuItem.Text = "Report Bug";
+      this.reportBugToolStripMenuItem.Click += new System.EventHandler(this.reportBugToolStripMenuItem_Click);
       // 
       // label2
       // 
@@ -429,13 +436,6 @@ namespace Stocks4All
       this.WatchListGrid.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.WatchListGrid_DataError);
       this.WatchListGrid.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.WatchListGrid_UserDeletingRow);
       // 
-      // reportBugToolStripMenuItem
-      // 
-      this.reportBugToolStripMenuItem.Name = "reportBugToolStripMenuItem";
-      this.reportBugToolStripMenuItem.Size = new System.Drawing.Size(81, 20);
-      this.reportBugToolStripMenuItem.Text = "Report Bug";
-      this.reportBugToolStripMenuItem.Click += new System.EventHandler(this.reportBugToolStripMenuItem_Click);
-      // 
       // MainForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
@@ -457,7 +457,7 @@ namespace Stocks4All
       this.MainMenuStrip = this.menuStrip1;
       this.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
       this.Name = "MainForm";
-      this.Text = "Stocks4All v1.2 (Beta) - To the Next Thousand Trades";
+      this.Text = "Stocks4All v1.3 - To the Next Thousand Trades";
       this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
       this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
       this.Load += new System.EventHandler(this.MainForm_Load);

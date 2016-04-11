@@ -78,11 +78,11 @@
       this.label3.AutoSize = true;
       this.label3.FlatStyle = System.Windows.Forms.FlatStyle.System;
       this.label3.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label3.Location = new System.Drawing.Point(189, 2);
+      this.label3.Location = new System.Drawing.Point(205, 2);
       this.label3.Name = "label3";
-      this.label3.Size = new System.Drawing.Size(185, 19);
+      this.label3.Size = new System.Drawing.Size(133, 19);
       this.label3.TabIndex = 8;
-      this.label3.Text = "Stocks4All v1.2(Beta)";
+      this.label3.Text = "Stocks4All v1.3";
       // 
       // resultLabel
       // 

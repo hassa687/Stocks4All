@@ -22,35 +22,6 @@ namespace Stocks4All.Model
     decimal trailPrcntg;
     List<decimal> executionSpread;
     int noOfShares;
-    //Dictionary<decimal, String> pendingOrders;
-    //public TimeInForce tif;
-
-
-    //public TimeInForce TIF
-    //{
-    //  get { return this.tif; }
-    //  set
-    //  {
-    //    if (value != this.tif)
-    //    {
-    //      this.tif = value;
-    //      NotifyPropertyChanged();
-    //    }
-    //  }
-    //}
-
-    //public Dictionary<decimal, String> PendingOrders
-    //{
-    //  get { return this.pendingOrders; }
-    //  set
-    //  {
-    //    if (value != this.pendingOrders)
-    //    {
-    //      this.pendingOrders = value;
-    //      NotifyPropertyChanged();
-    //    }
-    //  }
-    //}
 
     public PricePointControl.OrderType Type
     {
