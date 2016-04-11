@@ -413,7 +413,7 @@ namespace Stocks4All.Model
       Volatility = 2;
       DayTrade = false;
       //MaxLoss = 5m;
-      MaxPrctgLoss = 1.35m;
+      MaxPrctgLoss = 5m;
       ManageTrade = true;
     }
 

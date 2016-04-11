@@ -13,9 +13,13 @@ Executing orders in spreads based on short term volatility of a stock.
 
 Links
 -----
+Stocks4All Video Intro
+https://www.youtube.com/watch?v=1xVsWXYYHHI
+
 
 Robinhood REST API
 https://api.robinhood.com/
+
 
 Applicaiton Homepage
 http://meethassan.net/stocks4all/
