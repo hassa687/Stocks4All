@@ -13,5 +13,9 @@ Links
 Robinhood REST API
 https://api.robinhood.com/
 
+Applicaiton Homepage
 http://meethassan.net/stocks4all/
+
+
+Contact Support
 http://meethassan.net/contact-me/
