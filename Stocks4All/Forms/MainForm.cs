@@ -181,10 +181,10 @@ namespace Stocks4All
     /// this thread updates all the quotes on the grids also downloads
     /// also download latest portfolio from RH
     /// </summary>
-    /// <param name="parm"></param>
-    void MarketPerfomanceUpdater(object parm)
+    /// <param name="form"></param>
+    void MarketPerfomanceUpdater(object form)
     {
-      MainForm mainForm = (MainForm)parm;
+      MainForm mainForm = (MainForm)form;
       int i = 0;
       decimal lastprice = 0;
 

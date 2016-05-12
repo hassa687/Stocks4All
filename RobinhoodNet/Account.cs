@@ -42,7 +42,7 @@ namespace BasicallyMe.RobinhoodNet
         public dynamic Sma { get; set; }  // TODO: What is this?
         public dynamic SmaHeldForOrders { get; set; }
 
-        public dynamic MarginBalances { get; set; }
+        public MarginBalance MarginBalances { get; set; }
 
         
         public Balance CashBalance { get; set; }
@@ -83,11 +83,16 @@ namespace BasicallyMe.RobinhoodNet
             Sma = json["sma"];
             SmaHeldForOrders = json["sma_held_for_orders"];
 
-            MarginBalances = json["margin_balances"];
+			if(json["margin_balances"] != null)
+				MarginBalances = new MarginBalance(json["margin_balances"]);
 
-            MaxAchEarlyAccessAmount = (decimal)json["max_ach_early_access_amount"];
+			MaxAchEarlyAccessAmount = (decimal)json["max_ach_early_access_amount"];
 
-            CashBalance = new Balance(json["cash_balances"]);
+			//Robinhood Instant accounts are MarginBalance based - use this instead of CashBalance
+			if(MarginBalances != null)
+				CashBalance = MarginBalances;
+			else
+				CashBalance = new Balance(json["cash_balances"]);
         }
     }
     
