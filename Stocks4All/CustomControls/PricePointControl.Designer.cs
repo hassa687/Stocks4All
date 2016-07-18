@@ -34,9 +34,14 @@ namespace Stocks4All.CustomControls
       this.label1 = new System.Windows.Forms.Label();
       this.label2 = new System.Windows.Forms.Label();
       this.groupBoxName = new System.Windows.Forms.GroupBox();
+      this.label9 = new System.Windows.Forms.Label();
+      this.toFollowSharesComboBox = new System.Windows.Forms.ComboBox();
+      this.totalLabel = new System.Windows.Forms.Label();
       this.panelStopPrice = new System.Windows.Forms.Panel();
       this.label8 = new System.Windows.Forms.Label();
+      this.stopPriceCustomNumericUpDown = new Yolo.CustomControls.CustomNumericUpDown();
       this.trailPrcntgPanel = new System.Windows.Forms.Panel();
+      this.trailPrcntgNumericUpDown = new Yolo.CustomControls.CustomNumericUpDown();
       this.label7 = new System.Windows.Forms.Label();
       this.spreadValuesPanel = new System.Windows.Forms.Panel();
       this.labelExecution = new System.Windows.Forms.Label();
@@ -47,19 +52,16 @@ namespace Stocks4All.CustomControls
       this.label5 = new System.Windows.Forms.Label();
       this.triggerComboBox = new System.Windows.Forms.ComboBox();
       this.label4 = new System.Windows.Forms.Label();
+      this.numericUpDownNoOfShares = new Yolo.CustomControls.CustomNumericUpDown();
       this.label3 = new System.Windows.Forms.Label();
       this.comboBoxExecution = new System.Windows.Forms.ComboBox();
-      this.totalLabel = new System.Windows.Forms.Label();
-      this.stopPriceCustomNumericUpDown = new Yolo.CustomControls.CustomNumericUpDown();
-      this.trailPrcntgNumericUpDown = new Yolo.CustomControls.CustomNumericUpDown();
-      this.numericUpDownNoOfShares = new Yolo.CustomControls.CustomNumericUpDown();
       this.numericUpDownValue = new Yolo.CustomControls.CustomNumericUpDown();
       this.groupBoxName.SuspendLayout();
       this.panelStopPrice.SuspendLayout();
-      this.trailPrcntgPanel.SuspendLayout();
-      this.spreadValuesPanel.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.stopPriceCustomNumericUpDown)).BeginInit();
+      this.trailPrcntgPanel.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.trailPrcntgNumericUpDown)).BeginInit();
+      this.spreadValuesPanel.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.numericUpDownNoOfShares)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.numericUpDownValue)).BeginInit();
       this.SuspendLayout();
@@ -98,6 +100,8 @@ namespace Stocks4All.CustomControls
       // groupBoxName
       // 
       this.groupBoxName.BackColor = System.Drawing.SystemColors.ControlLightLight;
+      this.groupBoxName.Controls.Add(this.label9);
+      this.groupBoxName.Controls.Add(this.toFollowSharesComboBox);
       this.groupBoxName.Controls.Add(this.totalLabel);
       this.groupBoxName.Controls.Add(this.panelStopPrice);
       this.groupBoxName.Controls.Add(this.trailPrcntgPanel);
@@ -119,11 +123,42 @@ namespace Stocks4All.CustomControls
       this.groupBoxName.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.groupBoxName.Location = new System.Drawing.Point(3, 3);
       this.groupBoxName.Name = "groupBoxName";
-      this.groupBoxName.Size = new System.Drawing.Size(648, 131);
+      this.groupBoxName.Size = new System.Drawing.Size(648, 149);
       this.groupBoxName.TabIndex = 4;
       this.groupBoxName.TabStop = false;
       this.groupBoxName.Text = "SSs";
       this.groupBoxName.Enter += new System.EventHandler(this.groupBoxName_Enter);
+      // 
+      // label9
+      // 
+      this.label9.AutoSize = true;
+      this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.label9.Location = new System.Drawing.Point(9, 122);
+      this.label9.Name = "label9";
+      this.label9.Size = new System.Drawing.Size(74, 13);
+      this.label9.TabIndex = 22;
+      this.label9.Text = "Shares Count:";
+      // 
+      // toFollowSharesComboBox
+      // 
+      this.toFollowSharesComboBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
+      this.toFollowSharesComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.toFollowSharesComboBox.FormattingEnabled = true;
+      this.toFollowSharesComboBox.Location = new System.Drawing.Point(89, 119);
+      this.toFollowSharesComboBox.Name = "toFollowSharesComboBox";
+      this.toFollowSharesComboBox.Size = new System.Drawing.Size(174, 21);
+      this.toFollowSharesComboBox.TabIndex = 21;
+      this.toFollowSharesComboBox.SelectedValueChanged += new System.EventHandler(this.toFollowSharesComboBox_SelectedValueChanged);
+      // 
+      // totalLabel
+      // 
+      this.totalLabel.AutoSize = true;
+      this.totalLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.totalLabel.Location = new System.Drawing.Point(175, 88);
+      this.totalLabel.Name = "totalLabel";
+      this.totalLabel.Size = new System.Drawing.Size(34, 13);
+      this.totalLabel.TabIndex = 20;
+      this.totalLabel.Text = "$0.00";
       // 
       // panelStopPrice
       // 
@@ -146,6 +181,26 @@ namespace Stocks4All.CustomControls
       this.label8.TabIndex = 11;
       this.label8.Text = "Stop Offset From Price:";
       // 
+      // stopPriceCustomNumericUpDown
+      // 
+      this.stopPriceCustomNumericUpDown.DecimalPlaces = 2;
+      this.stopPriceCustomNumericUpDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.stopPriceCustomNumericUpDown.Location = new System.Drawing.Point(110, 6);
+      this.stopPriceCustomNumericUpDown.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+      this.stopPriceCustomNumericUpDown.Minimum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            -2147483648});
+      this.stopPriceCustomNumericUpDown.Name = "stopPriceCustomNumericUpDown";
+      this.stopPriceCustomNumericUpDown.Size = new System.Drawing.Size(75, 20);
+      this.stopPriceCustomNumericUpDown.TabIndex = 10;
+      this.stopPriceCustomNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+      // 
       // trailPrcntgPanel
       // 
       this.trailPrcntgPanel.Controls.Add(this.trailPrcntgNumericUpDown);
@@ -156,6 +211,15 @@ namespace Stocks4All.CustomControls
       this.trailPrcntgPanel.Size = new System.Drawing.Size(134, 29);
       this.trailPrcntgPanel.TabIndex = 16;
       this.trailPrcntgPanel.Visible = false;
+      // 
+      // trailPrcntgNumericUpDown
+      // 
+      this.trailPrcntgNumericUpDown.DecimalPlaces = 2;
+      this.trailPrcntgNumericUpDown.Location = new System.Drawing.Point(50, 5);
+      this.trailPrcntgNumericUpDown.Name = "trailPrcntgNumericUpDown";
+      this.trailPrcntgNumericUpDown.Size = new System.Drawing.Size(81, 20);
+      this.trailPrcntgNumericUpDown.TabIndex = 10;
+      this.trailPrcntgNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
       // 
       // label7
       // 
@@ -219,11 +283,11 @@ namespace Stocks4All.CustomControls
       // toFollowComboBox
       // 
       this.toFollowComboBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
-      this.toFollowComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.toFollowComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.toFollowComboBox.FormattingEnabled = true;
       this.toFollowComboBox.Location = new System.Drawing.Point(75, 45);
       this.toFollowComboBox.Name = "toFollowComboBox";
-      this.toFollowComboBox.Size = new System.Drawing.Size(75, 21);
+      this.toFollowComboBox.Size = new System.Drawing.Size(188, 24);
       this.toFollowComboBox.TabIndex = 12;
       this.toFollowComboBox.SelectedValueChanged += new System.EventHandler(this.toFollowComboBox_SelectedValueChanged);
       // 
@@ -259,66 +323,6 @@ namespace Stocks4All.CustomControls
       this.label4.TabIndex = 7;
       this.label4.Text = "No of Shares:";
       // 
-      // label3
-      // 
-      this.label3.AutoSize = true;
-      this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label3.Location = new System.Drawing.Point(220, 50);
-      this.label3.Name = "label3";
-      this.label3.Size = new System.Drawing.Size(57, 13);
-      this.label3.TabIndex = 5;
-      this.label3.Text = "Execution:";
-      // 
-      // comboBoxExecution
-      // 
-      this.comboBoxExecution.FlatStyle = System.Windows.Forms.FlatStyle.System;
-      this.comboBoxExecution.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.comboBoxExecution.FormattingEnabled = true;
-      this.comboBoxExecution.Location = new System.Drawing.Point(283, 47);
-      this.comboBoxExecution.Name = "comboBoxExecution";
-      this.comboBoxExecution.Size = new System.Drawing.Size(75, 21);
-      this.comboBoxExecution.TabIndex = 3;
-      this.comboBoxExecution.SelectedValueChanged += new System.EventHandler(this.comboBoxExecution_SelectedValueChanged);
-      // 
-      // totalLabel
-      // 
-      this.totalLabel.AutoSize = true;
-      this.totalLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.totalLabel.Location = new System.Drawing.Point(175, 88);
-      this.totalLabel.Name = "totalLabel";
-      this.totalLabel.Size = new System.Drawing.Size(34, 13);
-      this.totalLabel.TabIndex = 20;
-      this.totalLabel.Text = "$0.00";
-      // 
-      // stopPriceCustomNumericUpDown
-      // 
-      this.stopPriceCustomNumericUpDown.DecimalPlaces = 2;
-      this.stopPriceCustomNumericUpDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.stopPriceCustomNumericUpDown.Location = new System.Drawing.Point(110, 6);
-      this.stopPriceCustomNumericUpDown.Maximum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-      this.stopPriceCustomNumericUpDown.Minimum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            -2147483648});
-      this.stopPriceCustomNumericUpDown.Name = "stopPriceCustomNumericUpDown";
-      this.stopPriceCustomNumericUpDown.Size = new System.Drawing.Size(75, 20);
-      this.stopPriceCustomNumericUpDown.TabIndex = 10;
-      this.stopPriceCustomNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-      // 
-      // trailPrcntgNumericUpDown
-      // 
-      this.trailPrcntgNumericUpDown.DecimalPlaces = 2;
-      this.trailPrcntgNumericUpDown.Location = new System.Drawing.Point(50, 5);
-      this.trailPrcntgNumericUpDown.Name = "trailPrcntgNumericUpDown";
-      this.trailPrcntgNumericUpDown.Size = new System.Drawing.Size(81, 20);
-      this.trailPrcntgNumericUpDown.TabIndex = 10;
-      this.trailPrcntgNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-      // 
       // numericUpDownNoOfShares
       // 
       this.numericUpDownNoOfShares.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -333,6 +337,27 @@ namespace Stocks4All.CustomControls
       this.numericUpDownNoOfShares.TabIndex = 2;
       this.numericUpDownNoOfShares.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
       this.numericUpDownNoOfShares.ValueChanged += new System.EventHandler(this.numericUpDownNoOfShares_ValueChanged);
+      // 
+      // label3
+      // 
+      this.label3.AutoSize = true;
+      this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.label3.Location = new System.Drawing.Point(269, 50);
+      this.label3.Name = "label3";
+      this.label3.Size = new System.Drawing.Size(57, 13);
+      this.label3.TabIndex = 5;
+      this.label3.Text = "Execution:";
+      // 
+      // comboBoxExecution
+      // 
+      this.comboBoxExecution.FlatStyle = System.Windows.Forms.FlatStyle.System;
+      this.comboBoxExecution.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.comboBoxExecution.FormattingEnabled = true;
+      this.comboBoxExecution.Location = new System.Drawing.Point(332, 47);
+      this.comboBoxExecution.Name = "comboBoxExecution";
+      this.comboBoxExecution.Size = new System.Drawing.Size(75, 21);
+      this.comboBoxExecution.TabIndex = 3;
+      this.comboBoxExecution.SelectedValueChanged += new System.EventHandler(this.comboBoxExecution_SelectedValueChanged);
       // 
       // numericUpDownValue
       // 
@@ -363,18 +388,18 @@ namespace Stocks4All.CustomControls
       this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
       this.Controls.Add(this.groupBoxName);
       this.Name = "PricePointControl";
-      this.Size = new System.Drawing.Size(654, 137);
+      this.Size = new System.Drawing.Size(654, 155);
       this.Load += new System.EventHandler(this.PricePointControl_Load);
       this.groupBoxName.ResumeLayout(false);
       this.groupBoxName.PerformLayout();
       this.panelStopPrice.ResumeLayout(false);
       this.panelStopPrice.PerformLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.stopPriceCustomNumericUpDown)).EndInit();
       this.trailPrcntgPanel.ResumeLayout(false);
       this.trailPrcntgPanel.PerformLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.trailPrcntgNumericUpDown)).EndInit();
       this.spreadValuesPanel.ResumeLayout(false);
       this.spreadValuesPanel.PerformLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.stopPriceCustomNumericUpDown)).EndInit();
-      ((System.ComponentModel.ISupportInitialize)(this.trailPrcntgNumericUpDown)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.numericUpDownNoOfShares)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.numericUpDownValue)).EndInit();
       this.ResumeLayout(false);
@@ -408,5 +433,7 @@ namespace Stocks4All.CustomControls
     private System.Windows.Forms.Label label8;
         public System.Windows.Forms.Button placeOrderButton;
     private System.Windows.Forms.Label totalLabel;
+    private System.Windows.Forms.Label label9;
+    public System.Windows.Forms.ComboBox toFollowSharesComboBox;
   }
 }

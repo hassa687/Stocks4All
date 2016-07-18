@@ -17,6 +17,7 @@ namespace Stocks4All.CustomControls
     public event EventHandler ExecutionSpreadSelected;
     public event EventHandler TriggerSelected;
     public event EventHandler FollowSelected;
+    public event EventHandler FollowSharesSelected;
     public event EventHandler PlaceOrder;
 
     [Description("Text displayed in the groupbox"), Category("Data")]
@@ -50,9 +51,21 @@ namespace Stocks4All.CustomControls
       AtBid = 1,
       AtAsk = 2,
       AtLastTradedPrice = 3,
-      AtValue = 4
+      AtLastTradedPrice_Off_1 = 6,
+      AtLastTradedPrice_Off_2 = 7,
+      AtLastTradedPrice_Off_5 = 8,
+      AtLastTradedPrice_Off_10 = 9,
+      AtLastTradedPrice_Off_20 = 10,
+      AtValue = 4,
+      AtCost = 5,
+      
     }
-
+    public enum FollowShare
+    {
+      FullPosition = 1,
+      HalfPosition = 2,
+      Value = 3,
+    }
 
     public PricePointControl()
     {
@@ -61,6 +74,7 @@ namespace Stocks4All.CustomControls
       comboBoxExecution.DataSource = Enum.GetValues(typeof(Execution));
       triggerComboBox.DataSource = Enum.GetValues(typeof(TriggerType));
       toFollowComboBox.DataSource = Enum.GetValues(typeof(FollowPrice));
+      toFollowSharesComboBox.DataSource = Enum.GetValues(typeof(FollowShare));
       numericUpDownValue.TextChanged += NumericUpDownValue_TextChanged;
       numericUpDownNoOfShares.TextChanged += NumericUpDownNoOfShares_TextChanged;
     }
@@ -101,8 +115,9 @@ namespace Stocks4All.CustomControls
       this.numericUpDownNoOfShares.Value = pp.NoOfShares;
       this.triggerComboBox.SelectedItem = pp.Trigger;
       this.toFollowComboBox.SelectedItem = pp.FollowPrice;
+      this.toFollowSharesComboBox.SelectedItem = pp.FollowShare;
     }
-
+    
     public PricePoint Get()
     {
       PricePoint pp = new PricePoint();
@@ -114,6 +129,7 @@ namespace Stocks4All.CustomControls
       pp.Execution = (PricePointControl.Execution)this.comboBoxExecution.SelectedValue;
       pp.Trigger = (TriggerType)this.triggerComboBox.SelectedValue;
       pp.FollowPrice = (PricePointControl.FollowPrice)this.toFollowComboBox.SelectedValue;
+      pp.FollowShare = (PricePointControl.FollowShare)this.toFollowSharesComboBox.SelectedValue;
       pp.NoOfShares = (int)this.numericUpDownNoOfShares.Value;
       return pp;
     }
@@ -200,6 +216,12 @@ namespace Stocks4All.CustomControls
     private void groupBoxName_Enter(object sender, EventArgs e)
     {
 
+    }
+
+    private void toFollowSharesComboBox_SelectedValueChanged(object sender, EventArgs e)
+    {
+      if (this.FollowSharesSelected != null)
+        this.FollowSharesSelected(new object(), new EventArgs());
     }
   }
 }

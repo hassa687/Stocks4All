@@ -225,7 +225,7 @@ namespace Stocks4All.Model
       //get { return this.askPrice > 0 ? Math.Round(this.bidPrice / this.askPrice, 2) : 0; }
       get { return Math.Round(this.askPrice - this.bidPrice, 2); }
     }
-  
+
     [XmlIgnore]
     [Browsable(false)]
     [DisplayName("Color")]
@@ -407,14 +407,12 @@ namespace Stocks4All.Model
     public Stock(string ticker)
     {
       Ticker = ticker;
-      PriceTarget = new PricePoint() { Price = 0.00m, StopOffset = -0.05m, Trigger = TriggerType.Immediate,FollowPrice = PricePointControl.FollowPrice.AtValue, Type = PricePointControl.OrderType.Limit, Execution = PricePointControl.Execution.Limit, NoOfShares = 0 };
-      Entry = new PricePoint() { Price = 0.00m, StopOffset = -0.05m, Trigger = TriggerType.Immediate, Type = PricePointControl.OrderType.Limit, Execution = PricePointControl.Execution.Limit, NoOfShares = 0 };
-      StopLoss = new PricePoint() { StopOffset = -0.05m, Trigger = TriggerType.Stop, FollowPrice = PricePointControl.FollowPrice.AtValue, Price = 0.00m, Type = PricePointControl.OrderType.Limit, Execution = PricePointControl.Execution.Limit, NoOfShares = 0 };
+      
       Volatility = 2;
       DayTrade = false;
       //MaxLoss = 5m;
       MaxPrctgLoss = 5m;
-      ManageTrade = true;
+      ManageTrade = false;
     }
 
     public List<decimal> GetSpread(bool buying, decimal price, int NoOfShares, decimal volatility)

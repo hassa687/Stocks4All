@@ -17,6 +17,7 @@ namespace Stocks4All.Forms
     {
       InitializeComponent();
       loginFlag = cancelFlag = false;
+      
     }
 
     private void loginButton_Click(object sender, EventArgs e)
@@ -47,12 +48,13 @@ namespace Stocks4All.Forms
         Robinhood.Init(creden.Key, creden.Value);
         e.Result = true;
       }
-      catch
+      catch(Exception ex)
       {
         resultLabel.BeginInvoke((Action)delegate
         {
           resultLabel.Text = "Login Failed, Please confirm username  password";
         });
+        MessageBox.Show(ex.ToString());
         e.Result = false;
       }
     }

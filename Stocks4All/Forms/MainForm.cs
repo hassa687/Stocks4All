@@ -54,7 +54,7 @@ namespace Stocks4All
           do
           {
             ThreadedBindingList<OrderSnapshot> oList = new ThreadedBindingList<OrderSnapshot>(result.Items.ToList());
-
+            //add support for unconfirmed and partially filled orders
             if (oList != null && oList.Any(o => o.State == "queued") || oList.Any(o => o.State == "confirmed"))
             {
               //adding confirmed orders to pending order
@@ -216,7 +216,8 @@ namespace Stocks4All
               var q = Robinhood.rh.DownloadInstrument(position.InstrumentUrl.Uri.ToString());
               stock = new Stock() { Ticker = q.Result.Symbol, NoOfShares = (int)position.Quantity, CostBasis = position.AverageBuyPrice };
 
-              mainForm.stocks.Add(stock);
+              if(!mainForm.stocks.Any(s=>s.Ticker == stock.Ticker))
+                mainForm.stocks.Add(stock);
             }
             else
             {
@@ -228,7 +229,6 @@ namespace Stocks4All
                 stock.CostBasis = 0.00m;
             }
           }
-
 
           if (mainForm.stocks.Count() > 0)
             quotes = mainForm.stocks.Union(quotes).ToArray();
@@ -357,22 +357,22 @@ namespace Stocks4All
               }
 
               //Checking if Price target reached
-              if (stock.PriceTarget != null && stock.NoOfShares > 0
-                              && stock.PriceTarget.Price > 0
-                              && stock.PriceTarget.NoOfShares > 0
-                              && !priceTargeting.Contains(stock.Ticker))
-              {
-                //PT reached sell
-                if (stock.LastTradePrice + 0.02m >= stock.PriceTarget.Price) // within 2cent of price target place limit sell
-                {
-                  KeyValuePair<Stock, decimal> input = new KeyValuePair<Stock, decimal>(stock, stock.PriceTarget.Price);
-                  lock (priceTargeting)
-                  {
-                    priceTargeting.Add(stock.Ticker);
-                  }
-                  ThreadPool.QueueUserWorkItem(PriceTargeter, input);
-                }
-              }
+              //if (stock.PriceTarget != null && stock.NoOfShares > 0
+              //                && stock.PriceTarget.Price > 0
+              //                && stock.PriceTarget.NoOfShares > 0
+              //                && !priceTargeting.Contains(stock.Ticker))
+              //{
+              //  //PT reached sell
+              //  if (stock.LastTradePrice + 0.02m >= stock.PriceTarget.Price) // within 2cent of price target place limit sell
+              //  {
+              //    KeyValuePair<Stock, decimal> input = new KeyValuePair<Stock, decimal>(stock, stock.PriceTarget.Price);
+              //    lock (priceTargeting)
+              //    {
+              //      priceTargeting.Add(stock.Ticker);
+              //    }
+              //    ThreadPool.QueueUserWorkItem(PriceTargeter, input);
+              //  }
+              //}
             }
             else
             {

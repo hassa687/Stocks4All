@@ -31,12 +31,9 @@ namespace Stocks4All
     {
       this.components = new System.ComponentModel.Container();
       this.buttonCancel = new System.Windows.Forms.Button();
-      this.reminderTextBox = new System.Windows.Forms.TextBox();
       this.PriceTarget = new Stocks4All.CustomControls.PricePointControl();
       this.Entry = new Stocks4All.CustomControls.PricePointControl();
-      this.Stop = new Stocks4All.CustomControls.PricePointControl();
-      this.label12 = new System.Windows.Forms.Label();
-      this.bidAskRationLabel = new System.Windows.Forms.Label();
+      this.StopLoss = new Stocks4All.CustomControls.PricePointControl();
       this.label4 = new System.Windows.Forms.Label();
       this.label5 = new System.Windows.Forms.Label();
       this.labelVolatitlity = new System.Windows.Forms.Label();
@@ -86,7 +83,7 @@ namespace Stocks4All
       this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
       this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
       this.buttonCancel.FlatStyle = System.Windows.Forms.FlatStyle.System;
-      this.buttonCancel.Location = new System.Drawing.Point(1055, 583);
+      this.buttonCancel.Location = new System.Drawing.Point(1098, 588);
       this.buttonCancel.Name = "buttonCancel";
       this.buttonCancel.Size = new System.Drawing.Size(188, 30);
       this.buttonCancel.TabIndex = 10;
@@ -94,26 +91,16 @@ namespace Stocks4All
       this.buttonCancel.UseVisualStyleBackColor = true;
       this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
       // 
-      // reminderTextBox
-      // 
-      this.reminderTextBox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.reminderTextBox.Location = new System.Drawing.Point(365, 8);
-      this.reminderTextBox.Multiline = true;
-      this.reminderTextBox.Name = "reminderTextBox";
-      this.reminderTextBox.Size = new System.Drawing.Size(486, 93);
-      this.reminderTextBox.TabIndex = 34;
-      this.reminderTextBox.Visible = false;
-      // 
       // PriceTarget
       // 
       this.PriceTarget.AutoSize = true;
       this.PriceTarget.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
       this.PriceTarget.DisplayName = "Price Target";
       this.PriceTarget.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.PriceTarget.Location = new System.Drawing.Point(13, 448);
+      this.PriceTarget.Location = new System.Drawing.Point(13, 435);
       this.PriceTarget.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
       this.PriceTarget.Name = "PriceTarget";
-      this.PriceTarget.Size = new System.Drawing.Size(762, 169);
+      this.PriceTarget.Size = new System.Drawing.Size(762, 191);
       this.PriceTarget.TabIndex = 21;
       this.PriceTarget.Load += new System.EventHandler(this.PriceTarget_Load);
       // 
@@ -123,54 +110,32 @@ namespace Stocks4All
       this.Entry.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
       this.Entry.DisplayName = "Entry";
       this.Entry.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.Entry.Location = new System.Drawing.Point(13, 96);
+      this.Entry.Location = new System.Drawing.Point(13, 50);
       this.Entry.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
       this.Entry.Name = "Entry";
-      this.Entry.Size = new System.Drawing.Size(762, 169);
+      this.Entry.Size = new System.Drawing.Size(762, 191);
       this.Entry.TabIndex = 22;
       this.Entry.Load += new System.EventHandler(this.Entry_Load);
       this.Entry.VisibleChanged += new System.EventHandler(this.Entry_VisibleChanged);
       // 
-      // Stop
+      // StopLoss
       // 
-      this.Stop.AutoSize = true;
-      this.Stop.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-      this.Stop.DisplayName = "Stop";
-      this.Stop.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.Stop.Location = new System.Drawing.Point(13, 267);
-      this.Stop.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
-      this.Stop.Name = "Stop";
-      this.Stop.Size = new System.Drawing.Size(762, 169);
-      this.Stop.TabIndex = 23;
-      // 
-      // label12
-      // 
-      this.label12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.label12.AutoSize = true;
-      this.label12.FlatStyle = System.Windows.Forms.FlatStyle.System;
-      this.label12.Location = new System.Drawing.Point(205, 55);
-      this.label12.Name = "label12";
-      this.label12.Size = new System.Drawing.Size(123, 19);
-      this.label12.TabIndex = 33;
-      this.label12.Text = "Bid/Ask Spread:";
-      // 
-      // bidAskRationLabel
-      // 
-      this.bidAskRationLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.bidAskRationLabel.AutoSize = true;
-      this.bidAskRationLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
-      this.bidAskRationLabel.Location = new System.Drawing.Point(328, 55);
-      this.bidAskRationLabel.Name = "bidAskRationLabel";
-      this.bidAskRationLabel.Size = new System.Drawing.Size(31, 19);
-      this.bidAskRationLabel.TabIndex = 32;
-      this.bidAskRationLabel.Text = "Bid";
+      this.StopLoss.AutoSize = true;
+      this.StopLoss.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+      this.StopLoss.DisplayName = "Stop";
+      this.StopLoss.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.StopLoss.Location = new System.Drawing.Point(13, 245);
+      this.StopLoss.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
+      this.StopLoss.Name = "StopLoss";
+      this.StopLoss.Size = new System.Drawing.Size(762, 191);
+      this.StopLoss.TabIndex = 23;
       // 
       // label4
       // 
       this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
       this.label4.AutoSize = true;
       this.label4.FlatStyle = System.Windows.Forms.FlatStyle.System;
-      this.label4.Location = new System.Drawing.Point(624, 18);
+      this.label4.Location = new System.Drawing.Point(667, 18);
       this.label4.Name = "label4";
       this.label4.Size = new System.Drawing.Size(37, 19);
       this.label4.TabIndex = 27;
@@ -181,7 +146,7 @@ namespace Stocks4All
       this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
       this.label5.AutoSize = true;
       this.label5.FlatStyle = System.Windows.Forms.FlatStyle.System;
-      this.label5.Location = new System.Drawing.Point(619, 55);
+      this.label5.Location = new System.Drawing.Point(468, 18);
       this.label5.Name = "label5";
       this.label5.Size = new System.Drawing.Size(41, 19);
       this.label5.TabIndex = 26;
@@ -192,7 +157,7 @@ namespace Stocks4All
       this.labelVolatitlity.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
       this.labelVolatitlity.AutoSize = true;
       this.labelVolatitlity.FlatStyle = System.Windows.Forms.FlatStyle.System;
-      this.labelVolatitlity.Location = new System.Drawing.Point(866, 106);
+      this.labelVolatitlity.Location = new System.Drawing.Point(909, 106);
       this.labelVolatitlity.Name = "labelVolatitlity";
       this.labelVolatitlity.Size = new System.Drawing.Size(97, 19);
       this.labelVolatitlity.TabIndex = 25;
@@ -207,7 +172,7 @@ namespace Stocks4All
             0,
             0,
             131072});
-      this.Volatility.Location = new System.Drawing.Point(969, 104);
+      this.Volatility.Location = new System.Drawing.Point(1012, 104);
       this.Volatility.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -225,7 +190,7 @@ namespace Stocks4All
       this.labelMarketValue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
       this.labelMarketValue.AutoSize = true;
       this.labelMarketValue.FlatStyle = System.Windows.Forms.FlatStyle.System;
-      this.labelMarketValue.Location = new System.Drawing.Point(1067, 18);
+      this.labelMarketValue.Location = new System.Drawing.Point(1110, 18);
       this.labelMarketValue.Name = "labelMarketValue";
       this.labelMarketValue.Size = new System.Drawing.Size(95, 19);
       this.labelMarketValue.TabIndex = 20;
@@ -236,7 +201,7 @@ namespace Stocks4All
       this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
       this.label1.AutoSize = true;
       this.label1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-      this.label1.Location = new System.Drawing.Point(866, 18);
+      this.label1.Location = new System.Drawing.Point(909, 18);
       this.label1.Name = "label1";
       this.label1.Size = new System.Drawing.Size(100, 19);
       this.label1.TabIndex = 18;
@@ -251,7 +216,7 @@ namespace Stocks4All
             0,
             0,
             131072});
-      this.CostBasis.Location = new System.Drawing.Point(969, 16);
+      this.CostBasis.Location = new System.Drawing.Point(1012, 16);
       this.CostBasis.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -267,7 +232,7 @@ namespace Stocks4All
       this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
       this.label2.AutoSize = true;
       this.label2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-      this.label2.Location = new System.Drawing.Point(857, 62);
+      this.label2.Location = new System.Drawing.Point(900, 62);
       this.label2.Name = "label2";
       this.label2.Size = new System.Drawing.Size(106, 19);
       this.label2.TabIndex = 19;
@@ -276,7 +241,7 @@ namespace Stocks4All
       // NoOfShares
       // 
       this.NoOfShares.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-      this.NoOfShares.Location = new System.Drawing.Point(969, 60);
+      this.NoOfShares.Location = new System.Drawing.Point(1012, 60);
       this.NoOfShares.Maximum = new decimal(new int[] {
             1000000000,
             0,
@@ -302,9 +267,9 @@ namespace Stocks4All
       this.groupBoxTradingFields.Controls.Add(this.label6);
       this.groupBoxTradingFields.Controls.Add(this.MaxLossAmnt);
       this.groupBoxTradingFields.FlatStyle = System.Windows.Forms.FlatStyle.System;
-      this.groupBoxTradingFields.Location = new System.Drawing.Point(829, 137);
+      this.groupBoxTradingFields.Location = new System.Drawing.Point(846, 137);
       this.groupBoxTradingFields.Name = "groupBoxTradingFields";
-      this.groupBoxTradingFields.Size = new System.Drawing.Size(481, 142);
+      this.groupBoxTradingFields.Size = new System.Drawing.Size(464, 142);
       this.groupBoxTradingFields.TabIndex = 15;
       this.groupBoxTradingFields.TabStop = false;
       this.groupBoxTradingFields.Text = "Trading Fields";
@@ -312,7 +277,7 @@ namespace Stocks4All
       // checkManageTrade
       // 
       this.checkManageTrade.AutoSize = true;
-      this.checkManageTrade.Location = new System.Drawing.Point(126, 21);
+      this.checkManageTrade.Location = new System.Drawing.Point(203, 26);
       this.checkManageTrade.Name = "checkManageTrade";
       this.checkManageTrade.Size = new System.Drawing.Size(128, 23);
       this.checkManageTrade.TabIndex = 40;
@@ -325,7 +290,7 @@ namespace Stocks4All
       this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
       this.label9.AutoSize = true;
       this.label9.FlatStyle = System.Windows.Forms.FlatStyle.System;
-      this.label9.Location = new System.Drawing.Point(230, 85);
+      this.label9.Location = new System.Drawing.Point(320, 95);
       this.label9.Name = "label9";
       this.label9.Size = new System.Drawing.Size(24, 19);
       this.label9.TabIndex = 39;
@@ -337,7 +302,7 @@ namespace Stocks4All
       this.label10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
       this.label10.AutoSize = true;
       this.label10.FlatStyle = System.Windows.Forms.FlatStyle.System;
-      this.label10.Location = new System.Drawing.Point(359, 85);
+      this.label10.Location = new System.Drawing.Point(449, 95);
       this.label10.Name = "label10";
       this.label10.Size = new System.Drawing.Size(25, 19);
       this.label10.TabIndex = 38;
@@ -353,7 +318,7 @@ namespace Stocks4All
             0,
             0,
             131072});
-      this.ProfitTargPrctg.Location = new System.Drawing.Point(254, 83);
+      this.ProfitTargPrctg.Location = new System.Drawing.Point(344, 93);
       this.ProfitTargPrctg.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -371,7 +336,7 @@ namespace Stocks4All
       this.label11.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
       this.label11.AutoSize = true;
       this.label11.FlatStyle = System.Windows.Forms.FlatStyle.System;
-      this.label11.Location = new System.Drawing.Point(6, 85);
+      this.label11.Location = new System.Drawing.Point(96, 95);
       this.label11.Name = "label11";
       this.label11.Size = new System.Drawing.Size(118, 19);
       this.label11.TabIndex = 36;
@@ -387,7 +352,7 @@ namespace Stocks4All
             0,
             0,
             131072});
-      this.ProfitTargAmnt.Location = new System.Drawing.Point(130, 83);
+      this.ProfitTargAmnt.Location = new System.Drawing.Point(220, 93);
       this.ProfitTargAmnt.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -405,7 +370,7 @@ namespace Stocks4All
       this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
       this.label8.AutoSize = true;
       this.label8.FlatStyle = System.Windows.Forms.FlatStyle.System;
-      this.label8.Location = new System.Drawing.Point(309, 30);
+      this.label8.Location = new System.Drawing.Point(369, 35);
       this.label8.Name = "label8";
       this.label8.Size = new System.Drawing.Size(24, 19);
       this.label8.TabIndex = 34;
@@ -417,7 +382,7 @@ namespace Stocks4All
       this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
       this.label7.AutoSize = true;
       this.label7.FlatStyle = System.Windows.Forms.FlatStyle.System;
-      this.label7.Location = new System.Drawing.Point(230, 52);
+      this.label7.Location = new System.Drawing.Point(290, 57);
       this.label7.Name = "label7";
       this.label7.Size = new System.Drawing.Size(25, 19);
       this.label7.TabIndex = 33;
@@ -426,7 +391,7 @@ namespace Stocks4All
       // checkBoxDayTrade
       // 
       this.checkBoxDayTrade.AutoSize = true;
-      this.checkBoxDayTrade.Location = new System.Drawing.Point(6, 26);
+      this.checkBoxDayTrade.Location = new System.Drawing.Point(83, 31);
       this.checkBoxDayTrade.Name = "checkBoxDayTrade";
       this.checkBoxDayTrade.Size = new System.Drawing.Size(101, 23);
       this.checkBoxDayTrade.TabIndex = 15;
@@ -443,7 +408,7 @@ namespace Stocks4All
             0,
             0,
             131072});
-      this.MaxLossPrcntg.Location = new System.Drawing.Point(130, 50);
+      this.MaxLossPrcntg.Location = new System.Drawing.Point(190, 55);
       this.MaxLossPrcntg.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -460,7 +425,7 @@ namespace Stocks4All
       this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
       this.label6.AutoSize = true;
       this.label6.FlatStyle = System.Windows.Forms.FlatStyle.System;
-      this.label6.Location = new System.Drawing.Point(49, 52);
+      this.label6.Location = new System.Drawing.Point(109, 57);
       this.label6.Name = "label6";
       this.label6.Size = new System.Drawing.Size(75, 19);
       this.label6.TabIndex = 31;
@@ -475,7 +440,7 @@ namespace Stocks4All
             0,
             0,
             131072});
-      this.MaxLossAmnt.Location = new System.Drawing.Point(281, 50);
+      this.MaxLossAmnt.Location = new System.Drawing.Point(341, 55);
       this.MaxLossAmnt.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -511,7 +476,7 @@ namespace Stocks4All
       // 
       this.buttonSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
       this.buttonSave.FlatStyle = System.Windows.Forms.FlatStyle.System;
-      this.buttonSave.Location = new System.Drawing.Point(973, 583);
+      this.buttonSave.Location = new System.Drawing.Point(1016, 588);
       this.buttonSave.Name = "buttonSave";
       this.buttonSave.Size = new System.Drawing.Size(76, 30);
       this.buttonSave.TabIndex = 9;
@@ -534,7 +499,7 @@ namespace Stocks4All
       this.labelBidPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
       this.labelBidPrice.AutoSize = true;
       this.labelBidPrice.FlatStyle = System.Windows.Forms.FlatStyle.System;
-      this.labelBidPrice.Location = new System.Drawing.Point(666, 18);
+      this.labelBidPrice.Location = new System.Drawing.Point(709, 18);
       this.labelBidPrice.Name = "labelBidPrice";
       this.labelBidPrice.Size = new System.Drawing.Size(31, 19);
       this.labelBidPrice.TabIndex = 2;
@@ -545,7 +510,7 @@ namespace Stocks4All
       this.labelAskPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
       this.labelAskPrice.AutoSize = true;
       this.labelAskPrice.FlatStyle = System.Windows.Forms.FlatStyle.System;
-      this.labelAskPrice.Location = new System.Drawing.Point(666, 55);
+      this.labelAskPrice.Location = new System.Drawing.Point(515, 18);
       this.labelAskPrice.Name = "labelAskPrice";
       this.labelAskPrice.Size = new System.Drawing.Size(35, 19);
       this.labelAskPrice.TabIndex = 1;
@@ -557,9 +522,9 @@ namespace Stocks4All
       this.groupBoxPendingOrders.Controls.Add(this.buttonCancelPendingOrders);
       this.groupBoxPendingOrders.Controls.Add(this.dataGridViewPendingOrders);
       this.groupBoxPendingOrders.FlatStyle = System.Windows.Forms.FlatStyle.System;
-      this.groupBoxPendingOrders.Location = new System.Drawing.Point(829, 295);
+      this.groupBoxPendingOrders.Location = new System.Drawing.Point(846, 300);
       this.groupBoxPendingOrders.Name = "groupBoxPendingOrders";
-      this.groupBoxPendingOrders.Size = new System.Drawing.Size(414, 282);
+      this.groupBoxPendingOrders.Size = new System.Drawing.Size(440, 282);
       this.groupBoxPendingOrders.TabIndex = 29;
       this.groupBoxPendingOrders.TabStop = false;
       this.groupBoxPendingOrders.Text = "Pending Orders:";
@@ -568,7 +533,7 @@ namespace Stocks4All
       // 
       this.buttonCancelPendingOrders.Anchor = System.Windows.Forms.AnchorStyles.Right;
       this.buttonCancelPendingOrders.FlatStyle = System.Windows.Forms.FlatStyle.System;
-      this.buttonCancelPendingOrders.Location = new System.Drawing.Point(226, 13);
+      this.buttonCancelPendingOrders.Location = new System.Drawing.Point(252, 13);
       this.buttonCancelPendingOrders.Name = "buttonCancelPendingOrders";
       this.buttonCancelPendingOrders.Size = new System.Drawing.Size(182, 30);
       this.buttonCancelPendingOrders.TabIndex = 30;
@@ -580,7 +545,7 @@ namespace Stocks4All
       // 
       this.dataGridViewPendingOrders.Anchor = System.Windows.Forms.AnchorStyles.None;
       this.dataGridViewPendingOrders.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-      this.dataGridViewPendingOrders.Location = new System.Drawing.Point(3, 49);
+      this.dataGridViewPendingOrders.Location = new System.Drawing.Point(16, 49);
       this.dataGridViewPendingOrders.Name = "dataGridViewPendingOrders";
       this.dataGridViewPendingOrders.Size = new System.Drawing.Size(408, 277);
       this.dataGridViewPendingOrders.TabIndex = 28;
@@ -590,12 +555,10 @@ namespace Stocks4All
       this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.CancelButton = this.buttonCancel;
-      this.ClientSize = new System.Drawing.Size(1255, 624);
+      this.ClientSize = new System.Drawing.Size(1298, 629);
       this.Controls.Add(this.PriceTarget);
       this.Controls.Add(this.Entry);
-      this.Controls.Add(this.Stop);
-      this.Controls.Add(this.label12);
-      this.Controls.Add(this.bidAskRationLabel);
+      this.Controls.Add(this.StopLoss);
       this.Controls.Add(this.label4);
       this.Controls.Add(this.label5);
       this.Controls.Add(this.labelVolatitlity);
@@ -614,7 +577,6 @@ namespace Stocks4All
       this.Controls.Add(this.labelBidPrice);
       this.Controls.Add(this.labelAskPrice);
       this.Controls.Add(this.groupBoxPendingOrders);
-      this.Controls.Add(this.reminderTextBox);
       this.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
       this.Name = "HoldingForm";
       this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.HoldingForm_FormClosing);
@@ -654,7 +616,7 @@ namespace Stocks4All
     public System.Windows.Forms.Label labelMarketValue;
     private CustomControls.PricePointControl PriceTarget;
     private CustomControls.PricePointControl Entry;
-    private CustomControls.PricePointControl Stop;
+    private CustomControls.PricePointControl StopLoss;
     private System.Windows.Forms.Label labelVolatitlity;
     private CustomNumericUpDown Volatility;
     public System.Windows.Forms.Label label4;
@@ -672,9 +634,6 @@ namespace Stocks4All
     private CustomNumericUpDown ProfitTargPrctg;
     private System.Windows.Forms.Label label11;
     private CustomNumericUpDown ProfitTargAmnt;
-    public System.Windows.Forms.Label label12;
-    public System.Windows.Forms.Label bidAskRationLabel;
-    private System.Windows.Forms.TextBox reminderTextBox;
     private System.Windows.Forms.CheckBox checkManageTrade;
     private System.Windows.Forms.Timer timer1;
   }

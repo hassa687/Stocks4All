@@ -16,6 +16,7 @@ namespace Stocks4All.Model
     PricePointControl.OrderType type;
     PricePointControl.Execution execution;
     PricePointControl.FollowPrice followPrice;
+    PricePointControl.FollowShare followShare;
     TriggerType trigger;
     decimal price;
     decimal stopOffset;
@@ -69,6 +70,19 @@ namespace Stocks4All.Model
         if (value != this.followPrice)
         {
           this.followPrice = value;
+          NotifyPropertyChanged();
+        }
+      }
+    }
+
+    public PricePointControl.FollowShare FollowShare
+    {
+      get { return this.followShare; }
+      set
+      {
+        if (value != this.followShare)
+        {
+          this.followShare = value;
           NotifyPropertyChanged();
         }
       }

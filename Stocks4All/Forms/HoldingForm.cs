@@ -19,8 +19,8 @@ namespace Stocks4All
   {
     //RobinhoodClient rh;
     public Stock stock = null;
-
-    int refreshTime = 2000;
+    int positionSize = 100;
+    int refreshTime = 1000;
     volatile bool stopThreads = false;
     public bool save = false;
     bool shown = false;
@@ -43,13 +43,17 @@ namespace Stocks4All
         PriceTarget.PlaceOrder += PriceTarget_PlaceOrder;
         PriceTarget.TriggerSelected += PriceTarget_TriggerSelected;
 
-        Stop.ExecutionSpreadSelected += pricePointControlStop_ExecutionSpreadSelected;
-        Stop.PlaceOrder += Stop_PlaceOrder;
-        Stop.TriggerSelected += Stop_TriggerSelected;
+        StopLoss.ExecutionSpreadSelected += pricePointControlStop_ExecutionSpreadSelected;
+        StopLoss.PlaceOrder += Stop_PlaceOrder;
+        StopLoss.TriggerSelected += Stop_TriggerSelected;
 
         Entry.FollowSelected += Entry_FollowSelected;
         PriceTarget.FollowSelected += PriceTarget_FollowSelected;
-        Stop.FollowSelected += Stop_FollowSelected;
+        StopLoss.FollowSelected += Stop_FollowSelected;
+
+        Entry.FollowSharesSelected += Entry_FollowSharesSelected;
+        PriceTarget.FollowSharesSelected += PriceTarget_FollowSharesSelected;
+        StopLoss.FollowSharesSelected += Stop_FollowSharesSelected;
         this.refreshTime = refreshTime;
         textBoxTicker.DelayedTextChangedTimeout = 1000;
         textBoxTicker.DelayedTextChanged += textBoxTicker_DelayedTextChanged;
@@ -64,6 +68,22 @@ namespace Stocks4All
         {
           textBoxTicker.Enabled = false;
           this.stock = stock;
+
+          if(stock.PriceTarget == null)
+            this.stock.PriceTarget = new PricePoint() { Price = 0.00m, StopOffset = -0.05m, Trigger = TriggerType.Immediate, FollowShare = PricePointControl.FollowShare.FullPosition, FollowPrice = PricePointControl.FollowPrice.AtLastTradedPrice_Off_5, Type = PricePointControl.OrderType.Limit, Execution = PricePointControl.Execution.Limit, NoOfShares = 0 };
+          if(stock.Entry == null)
+            this.stock.Entry = new PricePoint() { Price = 0.00m, StopOffset = -0.05m, Trigger = TriggerType.Immediate, FollowShare = PricePointControl.FollowShare.FullPosition, FollowPrice = PricePointControl.FollowPrice.AtLastTradedPrice_Off_1, Type = PricePointControl.OrderType.Limit, Execution = PricePointControl.Execution.Limit, NoOfShares = 0 };
+          if(stock.StopLoss == null)
+            this.stock.StopLoss = new PricePoint() { StopOffset = -0.05m, Trigger = TriggerType.Stop, FollowShare = PricePointControl.FollowShare.FullPosition, FollowPrice = PricePointControl.FollowPrice.AtValue, Price = 0.00m, Type = PricePointControl.OrderType.Limit, Execution = PricePointControl.Execution.Limit, NoOfShares = 0 };
+
+          if ((int)stock.Entry.FollowShare == 0)
+            stock.Entry.FollowShare = PricePointControl.FollowShare.FullPosition;
+
+          if ((int)stock.StopLoss.FollowShare == 0)
+            stock.StopLoss.FollowShare = PricePointControl.FollowShare.FullPosition;
+
+          if ((int)stock.PriceTarget.FollowShare == 0)
+            stock.PriceTarget.FollowShare = PricePointControl.FollowShare.FullPosition;
         }
 
         textBoxTicker.Text = this.stock.Ticker;
@@ -79,20 +99,22 @@ namespace Stocks4All
 
         if (this.stock.StopLoss == null)
           this.stock.StopLoss = new PricePoint();
-        Stop.Set(this.stock.StopLoss);
+        StopLoss.Set(this.stock.StopLoss);
 
         if (this.stock.StopLoss.NoOfShares < 0)
           this.stock.StopLoss.NoOfShares *= -1;
-        Stop.numericUpDownNoOfShares.Value = this.stock.StopLoss.NoOfShares;
+        StopLoss.numericUpDownNoOfShares.Value = this.stock.StopLoss.NoOfShares;
 
         checkBoxDayTrade.Checked = this.stock.DayTrade;
-        CostBasis.Value = this.stock.CostBasis;
-        NoOfShares.Value = this.stock.NoOfShares;
+       
         Volatility.Value = this.stock.Volatility;
         MaxLossAmnt.Value = this.stock.MaxLoss;
         MaxLossPrcntg.Value = this.stock.MaxPrctgLoss;
-        bidAskRationLabel.Text = this.stock.BidAskSpread.ToString();
+        
         checkManageTrade.Checked = this.stock.ManageTrade;
+
+        SetUnEditableUIFields();
+
         UpdatePendingOrder();
         if (MaxLossPrcntg.Value == 0)
           MaxLossPrcntg.Value = 1.96m;
@@ -104,6 +126,26 @@ namespace Stocks4All
       }
     }
 
+    private void Stop_FollowSharesSelected(object sender, EventArgs e)
+    {
+      stock.StopLoss.FollowShare = (PricePointControl.FollowShare)StopLoss.toFollowSharesComboBox.SelectedValue;
+    }
+
+    private void PriceTarget_FollowSharesSelected(object sender, EventArgs e)
+    {
+      stock.PriceTarget.FollowShare = (PricePointControl.FollowShare)PriceTarget.toFollowSharesComboBox.SelectedValue;
+    }
+
+    private void Entry_FollowSharesSelected(object sender, EventArgs e)
+    {
+      stock.Entry.FollowShare = (PricePointControl.FollowShare)Entry.toFollowSharesComboBox.SelectedValue;
+    }
+
+    void SetUnEditableUIFields()
+    {
+      CostBasis.Value = this.stock.CostBasis;
+      NoOfShares.Value = this.stock.NoOfShares;
+    }
     private void timer1_Tick(object sender, EventArgs e)
     {
       this.Opacity = this.ClientRectangle.Contains(this.PointToClient(Cursor.Position)) ? 0.99 : 0.25;
@@ -129,13 +171,13 @@ namespace Stocks4All
 
     void Stop_PlaceOrder(object sender, EventArgs e)
     {
-      stock.StopLoss.Price = Stop.numericUpDownValue.Value;
-      stock.StopLoss.StopOffset = Stop.stopPriceCustomNumericUpDown.Value;
-      stock.StopLoss.TrailPrcntg = Stop.trailPrcntgNumericUpDown.Value;
-      stock.StopLoss.Type = (PricePointControl.OrderType)Stop.comboBoxOrderType.SelectedValue;
-      stock.StopLoss.Execution = (PricePointControl.Execution)Stop.comboBoxExecution.SelectedValue;
-      stock.StopLoss.Trigger = (TriggerType)Stop.triggerComboBox.SelectedValue;
-      stock.StopLoss.NoOfShares = (int)Stop.numericUpDownNoOfShares.Value;
+      stock.StopLoss.Price = StopLoss.numericUpDownValue.Value;
+      stock.StopLoss.StopOffset = StopLoss.stopPriceCustomNumericUpDown.Value;
+      stock.StopLoss.TrailPrcntg = StopLoss.trailPrcntgNumericUpDown.Value;
+      stock.StopLoss.Type = (PricePointControl.OrderType)StopLoss.comboBoxOrderType.SelectedValue;
+      stock.StopLoss.Execution = (PricePointControl.Execution)StopLoss.comboBoxExecution.SelectedValue;
+      stock.StopLoss.Trigger = (TriggerType)StopLoss.triggerComboBox.SelectedValue;
+      stock.StopLoss.NoOfShares = (int)StopLoss.numericUpDownNoOfShares.Value;
       if (stock.StopLoss.Price > 0)
       {
         if (stock.StopLoss.NoOfShares > 0)
@@ -175,6 +217,7 @@ namespace Stocks4All
       stock.Entry.Type = (PricePointControl.OrderType)Entry.comboBoxOrderType.SelectedValue;
       stock.Entry.Execution = (PricePointControl.Execution)Entry.comboBoxExecution.SelectedValue;
       stock.Entry.FollowPrice = (PricePointControl.FollowPrice)Entry.toFollowComboBox.SelectedValue;
+      stock.Entry.FollowShare = (PricePointControl.FollowShare)Entry.toFollowSharesComboBox.SelectedValue;
       stock.Entry.Trigger = (TriggerType)Entry.triggerComboBox.SelectedValue;
       stock.Entry.NoOfShares = (int)Entry.numericUpDownNoOfShares.Value;
       if (stock.Entry.Price > 0)
@@ -188,7 +231,7 @@ namespace Stocks4All
 
     void Stop_FollowSelected(object sender, EventArgs e)
     {
-      stock.StopLoss.FollowPrice = (PricePointControl.FollowPrice)Stop.toFollowComboBox.SelectedValue;
+      stock.StopLoss.FollowPrice = (PricePointControl.FollowPrice)StopLoss.toFollowComboBox.SelectedValue;
     }
 
     void PriceTarget_FollowSelected(object sender, EventArgs e)
@@ -237,14 +280,14 @@ namespace Stocks4All
     void pricePointControlStop_ExecutionSpreadSelected(object sender, EventArgs e)
     {
       List<decimal> spread = null;
-      if (Stop.numericUpDownValue.Value > 0 && Stop.numericUpDownNoOfShares.Value > 0)
+      if (StopLoss.numericUpDownValue.Value > 0 && StopLoss.numericUpDownNoOfShares.Value > 0)
       {
         spread =
-          stock.GetSpread(false, Stop.numericUpDownValue.Value,
-          (int)Stop.numericUpDownNoOfShares.Value, Volatility.Value);
+          stock.GetSpread(false, StopLoss.numericUpDownValue.Value,
+          (int)StopLoss.numericUpDownNoOfShares.Value, Volatility.Value);
       }
       stock.StopLoss.ExecutionSpread = spread;
-      Stop.comboBoxSpreadValues.DataSource = spread;
+      StopLoss.comboBoxSpreadValues.DataSource = spread;
     }
 
     void pricePointControlPriceTarget_ExecutionSpreadSelected(object sender, EventArgs e)
@@ -287,6 +330,7 @@ namespace Stocks4All
     void StockUpdater(object parm)
     {
       HoldingForm form = (HoldingForm)parm;
+      decimal offset = 0.0m;
       while (true)
       {
         try
@@ -295,6 +339,12 @@ namespace Stocks4All
             break;
           stock = Robinhood.GetQuote(new List<Stock>() { stock }).First();
           string quote = stock.Quote;
+
+          form.NoOfShares.Invoke((Action)delegate
+          {
+            SetUnEditableUIFields();
+          });
+          
 
           form.labelQuote.Invoke((Action)delegate
           {
@@ -308,115 +358,224 @@ namespace Stocks4All
             form.labelBidPrice.Text = "$" + stock.BidPrice.ToString();
           });
 
+          #region Setting entry details
           ///////////////////////////
-          if (stock.Entry.FollowPrice == PricePointControl.FollowPrice.AtAsk)
+          switch (stock.Entry.FollowPrice)
           {
-            form.Entry.numericUpDownValue.Invoke((Action)delegate
-            {
-              form.Entry.numericUpDownValue.Value = stock.AskPrice;
-            });
+            case PricePointControl.FollowPrice.AtAsk:
+              form.Entry.numericUpDownValue.Invoke((Action)delegate
+              {
+                form.Entry.numericUpDownValue.Value = stock.AskPrice;
+              });
+              break;
+
+            case PricePointControl.FollowPrice.AtLastTradedPrice:
+              form.Entry.numericUpDownValue.Invoke((Action)delegate
+              {
+                form.Entry.numericUpDownValue.Value = stock.LastTradePrice;
+              });
+              break;
+
+            case PricePointControl.FollowPrice.AtLastTradedPrice_Off_1:
+            case PricePointControl.FollowPrice.AtLastTradedPrice_Off_2:
+            case PricePointControl.FollowPrice.AtLastTradedPrice_Off_5:
+              String offsetString = stock.Entry.FollowPrice.ToString().Split(new Char[] { '_' })[2];
+              if (decimal.TryParse(offsetString, out offset))
+              {
+                offset /= 100; //convert to cents
+                form.Entry.numericUpDownValue.Invoke((Action)delegate
+                {
+                  form.Entry.numericUpDownValue.Value = stock.LastTradePrice + offset;
+                });
+              }
+              break;
+
+            case PricePointControl.FollowPrice.AtBid:
+              form.Entry.numericUpDownValue.Invoke((Action)delegate
+              {
+                form.Entry.numericUpDownValue.Value = stock.BidPrice;
+              });
+              break;
           }
 
-          if (stock.Entry.FollowPrice == PricePointControl.FollowPrice.AtLastTradedPrice)
+          //how many shared to get
+          switch (stock.Entry.FollowShare)
           {
-            form.Entry.numericUpDownValue.Invoke((Action)delegate
-            {
-              form.Entry.numericUpDownValue.Value = stock.LastTradePrice + 0.01m;
-            });
+            case PricePointControl.FollowShare.FullPosition:
+              form.Entry.numericUpDownValue.Invoke((Action)delegate
+              {
+                form.Entry.numericUpDownNoOfShares.Value = positionSize / stock.LastTradePrice;
+              });
+              break;
+            case PricePointControl.FollowShare.HalfPosition:
+              form.Entry.numericUpDownValue.Invoke((Action)delegate
+              {
+                form.Entry.numericUpDownNoOfShares.Value = positionSize / stock.LastTradePrice / 2;
+              });
+              break;
+            case PricePointControl.FollowShare.Value:
+              break;
           }
 
-          if (stock.Entry.FollowPrice == PricePointControl.FollowPrice.AtBid)
-          {
-            form.Entry.numericUpDownValue.Invoke((Action)delegate
-            {
-              form.Entry.numericUpDownValue.Value = stock.BidPrice;
-            });
-          }
+         
+          
+          #endregion
+
+
+          #region Setting StopLoss details
           /////////////////////////////////////////////
           if (stock.StopLoss.FollowPrice == PricePointControl.FollowPrice.AtAsk)
           {
-            form.Stop.numericUpDownValue.Invoke((Action)delegate
+            form.StopLoss.numericUpDownValue.Invoke((Action)delegate
             {
-              form.Stop.numericUpDownValue.Value = stock.AskPrice;
+              form.StopLoss.numericUpDownValue.Value = stock.AskPrice;
             });
           }
 
           if (stock.StopLoss.FollowPrice == PricePointControl.FollowPrice.AtBid)
           {
-            form.Stop.numericUpDownValue.Invoke((Action)delegate
+            form.StopLoss.numericUpDownValue.Invoke((Action)delegate
             {
-              form.Stop.numericUpDownValue.Value = stock.BidPrice;
+              form.StopLoss.numericUpDownValue.Value = stock.BidPrice;
             });
           }
 
           if (stock.StopLoss.FollowPrice == PricePointControl.FollowPrice.AtLastTradedPrice)
           {
-            form.Stop.numericUpDownValue.Invoke((Action)delegate
+            form.StopLoss.numericUpDownValue.Invoke((Action)delegate
             {
-              form.Stop.numericUpDownValue.Value = stock.LastTradePrice;
+              form.StopLoss.numericUpDownValue.Value = stock.LastTradePrice;
             });
           }
 
-          ///////////////
-          if (stock.PriceTarget.FollowPrice == PricePointControl.FollowPrice.AtAsk)
+          //how many shared to sell
+          switch (stock.StopLoss.FollowShare)
           {
-            form.PriceTarget.numericUpDownValue.Invoke((Action)delegate
-            {
-              form.PriceTarget.numericUpDownValue.Value = stock.AskPrice;
-            });
+            case PricePointControl.FollowShare.FullPosition:
+              form.StopLoss.numericUpDownValue.Invoke((Action)delegate
+              {
+                form.StopLoss.numericUpDownNoOfShares.Value = stock.NoOfShares;
+                form.StopLoss.numericUpDownNoOfShares.Text = form.StopLoss.numericUpDownNoOfShares.Value.ToString();
+              });
+              break;
+            case PricePointControl.FollowShare.HalfPosition:
+              form.StopLoss.numericUpDownValue.Invoke((Action)delegate
+              {
+                form.StopLoss.numericUpDownNoOfShares.Value = stock.NoOfShares /2;
+                form.StopLoss.numericUpDownNoOfShares.Text = form.StopLoss.numericUpDownNoOfShares.Value.ToString();
+              });
+              break;
+            case PricePointControl.FollowShare.Value:
+              break;
+          }
+          #endregion
+
+
+          #region Setting price target details
+          switch (stock.PriceTarget.FollowPrice)
+          {
+            case PricePointControl.FollowPrice.AtAsk:
+              form.PriceTarget.numericUpDownValue.Invoke((Action)delegate
+              {
+                form.PriceTarget.numericUpDownValue.Value = stock.AskPrice;
+              });
+              break;
+
+            case PricePointControl.FollowPrice.AtLastTradedPrice:
+              form.PriceTarget.numericUpDownValue.Invoke((Action)delegate
+              {
+                form.PriceTarget.numericUpDownValue.Value = stock.LastTradePrice;
+              });
+              break;
+
+            case PricePointControl.FollowPrice.AtCost:
+              form.PriceTarget.numericUpDownValue.Invoke((Action)delegate
+              {
+                form.PriceTarget.numericUpDownValue.Value = stock.CostBasis;
+              });
+              break;
+
+            case PricePointControl.FollowPrice.AtLastTradedPrice_Off_1:
+            case PricePointControl.FollowPrice.AtLastTradedPrice_Off_2:
+            case PricePointControl.FollowPrice.AtLastTradedPrice_Off_5:
+            case PricePointControl.FollowPrice.AtLastTradedPrice_Off_10:
+            case PricePointControl.FollowPrice.AtLastTradedPrice_Off_20:
+              String offsetString = stock.PriceTarget.FollowPrice.ToString().Split(new Char[] { '_' })[2];
+              if (decimal.TryParse(offsetString, out offset))
+              {
+                offset /= 100; //convert to cents
+                form.PriceTarget.numericUpDownValue.Invoke((Action)delegate
+                {
+                  form.PriceTarget.numericUpDownValue.Value = stock.LastTradePrice - offset;
+                });
+              }
+              break;
+
+            case PricePointControl.FollowPrice.AtBid:
+              form.PriceTarget.numericUpDownValue.Invoke((Action)delegate
+              {
+                form.PriceTarget.numericUpDownValue.Value = stock.BidPrice;
+              });
+              break;
           }
 
-          if (stock.PriceTarget.FollowPrice == PricePointControl.FollowPrice.AtLastTradedPrice)
+          //how many shared to sell
+          switch (stock.PriceTarget.FollowShare)
           {
-            form.PriceTarget.numericUpDownValue.Invoke((Action)delegate
-            {
-              form.PriceTarget.numericUpDownValue.Value = stock.LastTradePrice;
-            });
+            case PricePointControl.FollowShare.FullPosition:
+              form.PriceTarget.numericUpDownValue.Invoke((Action)delegate
+              {
+                form.PriceTarget.numericUpDownNoOfShares.Value = stock.NoOfShares;
+                form.PriceTarget.numericUpDownNoOfShares.Text = form.PriceTarget.numericUpDownNoOfShares.Value.ToString();
+              });
+              break;
+            case PricePointControl.FollowShare.HalfPosition:
+              form.PriceTarget.numericUpDownValue.Invoke((Action)delegate
+              {
+                form.PriceTarget.numericUpDownNoOfShares.Value = stock.NoOfShares / 2;
+                form.PriceTarget.numericUpDownNoOfShares.Text = form.PriceTarget.numericUpDownNoOfShares.Value.ToString();
+              });
+              break;
+            case PricePointControl.FollowShare.Value:
+              break;
           }
+          #endregion
 
-          if (stock.PriceTarget.FollowPrice == PricePointControl.FollowPrice.AtBid)
-          {
-            form.PriceTarget.numericUpDownValue.Invoke((Action)delegate
-            {
-              form.PriceTarget.numericUpDownValue.Value = stock.BidPrice;
-            });
-          }
+
+
 
           form.labelMarketValue.Invoke((Action)delegate
           {
             form.labelMarketValue.Text = "Market Value: $" + Math.Round(stock.LastTradePrice * form.NoOfShares.Value, 2).ToString();
           });
 
-          form.bidAskRationLabel.Invoke((Action)delegate
-          {
-            bidAskRationLabel.Text = stock.BidAskSpread.ToString();
-          });
+         
 
           if (stock.NoOfShares > 0 && (stock.PendingOrders == null || !stock.PendingOrders.Any(o => o.Side == Side.Sell && o.Trigger == "stop")))
           {
-            Stop.Invoke((Action)delegate
+            StopLoss.Invoke((Action)delegate
             {
-              if (Stop.placeOrderButton.BackColor == SystemColors.ControlLightLight)
+              if (StopLoss.placeOrderButton.BackColor == SystemColors.ControlLightLight)
               {
-                Stop.placeOrderButton.BackColor = Color.IndianRed;
-                Stop.placeOrderButton.ForeColor = Color.White;
-                Stop.placeOrderButton.Text = "No Stop Order";
+                StopLoss.placeOrderButton.BackColor = Color.IndianRed;
+                StopLoss.placeOrderButton.ForeColor = Color.White;
+                StopLoss.placeOrderButton.Text = "No Stop Order";
               }
               else
               {
-                Stop.placeOrderButton.BackColor = SystemColors.ControlLightLight;
-                Stop.placeOrderButton.ForeColor = SystemColors.WindowText;
-                Stop.placeOrderButton.Text = "Place Order";
+                StopLoss.placeOrderButton.BackColor = SystemColors.ControlLightLight;
+                StopLoss.placeOrderButton.ForeColor = SystemColors.WindowText;
+                StopLoss.placeOrderButton.Text = "Place Order";
               }
             });
           }
           else
           {
-            Stop.Invoke((Action)delegate
+            StopLoss.Invoke((Action)delegate
             {
-              Stop.placeOrderButton.BackColor = SystemColors.ButtonFace;
-              Stop.placeOrderButton.ForeColor = SystemColors.WindowText;
-              Stop.placeOrderButton.Text = "Place Order";
+              StopLoss.placeOrderButton.BackColor = SystemColors.ButtonFace;
+              StopLoss.placeOrderButton.ForeColor = SystemColors.WindowText;
+              StopLoss.placeOrderButton.Text = "Place Order";
             });
           }
 
@@ -476,62 +635,9 @@ namespace Stocks4All
         return;
       }
 
-      //stock.PriceTarget.Value = PriceTarget.numericUpDownValue.Value;
-      //stock.PriceTarget.TrailPrcntg = PriceTarget.trailPrcntgNumericUpDown.Value;
-      //stock.PriceTarget.Type = (PricePointControl.OrderType)PriceTarget.comboBoxOrderType.SelectedValue;
-      //stock.PriceTarget.Execution = (PricePointControl.Execution)PriceTarget.comboBoxExecution.SelectedValue;
-      //stock.PriceTarget.Trigger = (TriggerType)PriceTarget.triggerComboBox.SelectedValue;
-      //stock.PriceTarget.FollowPrice = (PricePointControl.FollowPrice)PriceTarget.toFollowComboBox.SelectedValue;
-      //stock.PriceTarget.NoOfShares = (int)PriceTarget.numericUpDownNoOfShares.Value;
       stock.PriceTarget = PriceTarget.Get();
-      //if (stock.PriceTarget.Value > 0 && stock.PriceTarget.NoOfShares == 0)
-      //{
-      //  MessageBox.Show("Enter No of Shares to sell when Price reaches Price Target.");
-      //  return;
-      //}
-
-
-      //stock.Entry.Type = (PricePointControl.OrderType)Entry.comboBoxOrderType.SelectedValue;
-      //stock.Entry.Execution = (PricePointControl.Execution)Entry.comboBoxExecution.SelectedValue;
-      //stock.Entry.Trigger = (TriggerType)Entry.triggerComboBox.SelectedValue;
-      //stock.Entry.FollowPrice = (PricePointControl.FollowPrice)Entry.toFollowComboBox.SelectedValue;
-      //stock.Entry.NoOfShares = (int)Entry.numericUpDownNoOfShares.Value;
-      //stock.Entry.Value = Entry.numericUpDownValue.Value;
-      //stock.Entry.TrailPrcntg = Entry.trailPrcntgNumericUpDown.Value;
       stock.Entry = Entry.Get();
-      //if (stock.Entry.Value > 0 && stock.Entry.NoOfShares == 0)
-      //{
-      //  MessageBox.Show("Enter No of Shares to but when Price reaches Entry Price.");
-      //  return;
-      //}
-
-      //stock.StopLoss.Value = Stop.numericUpDownValue.Value;
-      //stock.StopLoss.TrailPrcntg = Stop.trailPrcntgNumericUpDown.Value;
-      //stock.StopLoss.Type = (PricePointControl.OrderType)Stop.comboBoxOrderType.SelectedValue;
-      //stock.StopLoss.Execution = (PricePointControl.Execution)Stop.comboBoxExecution.SelectedValue;
-      //stock.StopLoss.Trigger = (TriggerType)Stop.triggerComboBox.SelectedValue;
-      //stock.StopLoss.FollowPrice = (PricePointControl.FollowPrice)Stop.toFollowComboBox.SelectedValue;
-      //stock.StopLoss.NoOfShares = (int)Stop.numericUpDownNoOfShares.Value;
-      stock.StopLoss = Stop.Get();
-      //if (stock.StopLoss.Value > 0)
-      //{
-      //  if (stock.StopLoss.NoOfShares == 0)
-      //  {
-      //    MessageBox.Show("Enter No of Shares to sell when Price reaches Stop Loss Price.");
-      //    return;
-      //  }
-
-      //  ////Set Stop loss if not already set
-      //  //if (setStopLoss)
-      //  //{
-      //  //  //Robinhood.Init();
-      //  //  //Robinhood.PlaceOrder(stock.Ticker, stock.StopLoss, TimeInForce.GoodTillCancel);
-      //  //  stock.StopLoss.NoOfShares *= -1;
-      //  //  if(stock.Trade)
-      //  //    ThreadPool.QueueUserWorkItem(PlaceStop,stock);
-      //  //  //MainForm.PlaceOrder(stock.Ticker, stock.StopLoss, TimeInForce.GoodTillCancel);
-      //  //}
-      //}
+      stock.StopLoss = StopLoss.Get();
 
       stock.DayTrade = checkBoxDayTrade.Checked;
       stock.ManageTrade = checkManageTrade.Checked;
@@ -568,7 +674,7 @@ namespace Stocks4All
 
     private void numericUpDownVolatility_ValueChanged(object sender, EventArgs e)
     {
-      if (Stop.comboBoxExecution.SelectedValue.ToString() == PricePointControl.Execution.Spread.ToString())
+      if (StopLoss.comboBoxExecution.SelectedValue.ToString() == PricePointControl.Execution.Spread.ToString())
         pricePointControlStop_ExecutionSpreadSelected(null, null);
       if (PriceTarget.comboBoxExecution.SelectedValue.ToString() == PricePointControl.Execution.Spread.ToString())
         pricePointControlPriceTarget_ExecutionSpreadSelected(null, null);
@@ -616,7 +722,7 @@ namespace Stocks4All
         return;
       }
 
-      Stop.numericUpDownValue.Value = Math.Round(relativeToo - MaxLossAmnt.Value / noOfShares, 2);
+      StopLoss.numericUpDownValue.Value = Math.Round(relativeToo - MaxLossAmnt.Value / noOfShares, 2);
       decimal tempValue = ((MaxLossAmnt.Value / noOfShares) / relativeToo) * 100;
       if (tempValue != MaxLossPrcntg.Value)
         MaxLossPrcntg.Value = tempValue;
@@ -675,7 +781,7 @@ namespace Stocks4All
         }
 
         decimal stopvalue = Math.Round(relativeToo - MaxLossAmnt.Value / noOfShares, 2);
-        Stop.numericUpDownValue.Value = stopvalue > 0 ? stopvalue : 0;
+        StopLoss.numericUpDownValue.Value = stopvalue > 0 ? stopvalue : 0;
         decimal tempValue = ((MaxLossAmnt.Value / noOfShares) / relativeToo) * 100;
         if (tempValue != MaxLossPrcntg.Value)
           MaxLossPrcntg.Value = tempValue;
@@ -706,7 +812,7 @@ namespace Stocks4All
         }
 
         decimal stopvalue = Math.Round(relativeToo - (relativeToo * MaxLossPrcntg.Value / 100), 2);
-        Stop.numericUpDownValue.Value = stopvalue > 0 ? stopvalue : 0;
+        StopLoss.numericUpDownValue.Value = stopvalue > 0 ? stopvalue : 0;
         decimal tempValue = Math.Round((relativeToo * MaxLossPrcntg.Value / 100) * noOfShares, 2);
         if (tempValue != MaxLossAmnt.Value)
           MaxLossAmnt.Value = tempValue;
@@ -790,7 +896,7 @@ namespace Stocks4All
       //stock.StopLoss.FollowPrice = (PricePointControl.FollowPrice)Stop.toFollowComboBox.SelectedValue;
       //stock.StopLoss.Trigger = (TriggerType)Stop.triggerComboBox.SelectedValue;
       //stock.StopLoss.NoOfShares = (int)Stop.numericUpDownNoOfShares.Value;
-      stock.StopLoss = Stop.Get();
+      stock.StopLoss = StopLoss.Get();
       if (stock.StopLoss.Price > 0)
       {
         if (stock.StopLoss.NoOfShares > 0)
