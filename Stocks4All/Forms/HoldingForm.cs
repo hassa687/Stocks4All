@@ -62,30 +62,13 @@ namespace Stocks4All
         {
           textBoxTicker.Enabled = true;
           this.stock = new Stock("");
-
         }
         else
         {
           textBoxTicker.Enabled = false;
           this.stock = stock;
-
-          if(stock.PriceTarget == null)
-            this.stock.PriceTarget = new PricePoint() { Price = 0.00m, StopOffset = -0.05m, Trigger = TriggerType.Immediate, FollowShare = PricePointControl.FollowShare.FullPosition, FollowPrice = PricePointControl.FollowPrice.AtLastTradedPrice_Off_5, Type = PricePointControl.OrderType.Limit, Execution = PricePointControl.Execution.Limit, NoOfShares = 0 };
-          if(stock.Entry == null)
-            this.stock.Entry = new PricePoint() { Price = 0.00m, StopOffset = -0.05m, Trigger = TriggerType.Immediate, FollowShare = PricePointControl.FollowShare.FullPosition, FollowPrice = PricePointControl.FollowPrice.AtLastTradedPrice_Off_1, Type = PricePointControl.OrderType.Limit, Execution = PricePointControl.Execution.Limit, NoOfShares = 0 };
-          if(stock.StopLoss == null)
-            this.stock.StopLoss = new PricePoint() { StopOffset = -0.05m, Trigger = TriggerType.Stop, FollowShare = PricePointControl.FollowShare.FullPosition, FollowPrice = PricePointControl.FollowPrice.AtValue, Price = 0.00m, Type = PricePointControl.OrderType.Limit, Execution = PricePointControl.Execution.Limit, NoOfShares = 0 };
-
-          if ((int)stock.Entry.FollowShare == 0)
-            stock.Entry.FollowShare = PricePointControl.FollowShare.FullPosition;
-
-          if ((int)stock.StopLoss.FollowShare == 0)
-            stock.StopLoss.FollowShare = PricePointControl.FollowShare.FullPosition;
-
-          if ((int)stock.PriceTarget.FollowShare == 0)
-            stock.PriceTarget.FollowShare = PricePointControl.FollowShare.FullPosition;
         }
-
+        InitializeStock();
         textBoxTicker.Text = this.stock.Ticker;
         //Temp remove
         if (this.stock.PriceTarget == null)
@@ -342,6 +325,7 @@ namespace Stocks4All
 
           form.NoOfShares.Invoke((Action)delegate
           {
+            InitializeStock();
             SetUnEditableUIFields();
           });
           
@@ -979,6 +963,25 @@ namespace Stocks4All
     private void checkManageTrade_CheckedChanged(object sender, EventArgs e)
     {
       stock.ManageTrade = checkManageTrade.Checked;
+    }
+
+    private void InitializeStock()
+    {
+      if (stock.PriceTarget == null)
+        this.stock.PriceTarget = new PricePoint() { Price = 0.00m, StopOffset = -0.05m, Trigger = TriggerType.Immediate, FollowShare = PricePointControl.FollowShare.FullPosition, FollowPrice = PricePointControl.FollowPrice.AtLastTradedPrice_Off_5, Type = PricePointControl.OrderType.Limit, Execution = PricePointControl.Execution.Limit, NoOfShares = 0 };
+      if (stock.Entry == null)
+        this.stock.Entry = new PricePoint() { Price = 0.00m, StopOffset = -0.05m, Trigger = TriggerType.Immediate, FollowShare = PricePointControl.FollowShare.FullPosition, FollowPrice = PricePointControl.FollowPrice.AtLastTradedPrice_Off_1, Type = PricePointControl.OrderType.Limit, Execution = PricePointControl.Execution.Limit, NoOfShares = 0 };
+      if (stock.StopLoss == null)
+        this.stock.StopLoss = new PricePoint() { StopOffset = -0.05m, Trigger = TriggerType.Stop, FollowShare = PricePointControl.FollowShare.FullPosition, FollowPrice = PricePointControl.FollowPrice.AtValue, Price = 0.00m, Type = PricePointControl.OrderType.Limit, Execution = PricePointControl.Execution.Limit, NoOfShares = 0 };
+
+      if ((int)stock.Entry.FollowShare == 0)
+        stock.Entry.FollowShare = PricePointControl.FollowShare.FullPosition;
+
+      if ((int)stock.StopLoss.FollowShare == 0)
+        stock.StopLoss.FollowShare = PricePointControl.FollowShare.FullPosition;
+
+      if ((int)stock.PriceTarget.FollowShare == 0)
+        stock.PriceTarget.FollowShare = PricePointControl.FollowShare.FullPosition;
     }
 
   }
